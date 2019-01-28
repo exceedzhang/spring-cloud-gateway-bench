@@ -1,0 +1,22 @@
+#查询服务
+curl -i -X GET --url http://localhost:8001/services/
+#新建服务
+curl -i -X POST --url http://localhost:8001/services/ --data 'name=hello-service' --data 'host=localhost' --data 'port=8000'
+#添加路由
+curl -i -X POST --url http://localhost:8001/services/hello-service/routes --data 'methods[]=post'
+#添加plugin安全认证
+curl -i -X POST --url http://localhost:8001/services/hello-service/plugins/ --data 'name=key-auth'
+
+#添加用户
+curl -i -X POST --url http://localhost:8001/consumers/ --data "username=Jason"
+#更新用户apikey
+curl -i -X POST --url http://localhost:8001/consumers/Jason/key-auth/ --data 'key=1q2w3e4r'
+#设置匿名访问
+#curl -i -X PATCH --url http://localhost:8001/plugins/<your-plugin-id> --data "config.anonymous=<your-consumer-id>"
+curl -i -X PATCH --url http://localhost:8001/plugins/6120920f-958d-4875-bee2-a5a1bdbc3e7b --data "config.anonymous=dbed76e6-869b-41a1-bc76-9933dfddc308"
+curl -i -X PATCH --url http://localhost:8001/plugins/6120920f-958d-4875-bee2-a5a1bdbc3e7b --data "config.anonymous="
+
+curl -i -X GET --url http://localhost:8000 --header "apikey: ENTER_KEY_HERE"
+
+80 kong 8001 kong admin
+8000 webserver
